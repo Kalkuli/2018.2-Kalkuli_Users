@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Kalkuli/2018.2-Kalkuli_Users.svg?branch=master
+)](https://travis-ci.com/Kalkuli/2018.2-Kalkuli_Users)
+
 # Configurando o ambiente
 Para instruções de como instalar o Docker e o Docker-compose clique [aqui](https://github.com/Kalkuli/2018.2-Kalkuli_Front-End/blob/master/README.md).
 
