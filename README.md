@@ -21,3 +21,18 @@ http://localhost:5003/
 
 
 Agora você já pode começar a contribuir!
+
+
+## Testando
+
+Para rodar os testes utilize o comando:
+
+```docker-compose -f docker-compose-dev.yml run base python manage.py test```
+
+E para saber a cobertura dos testes utilize:
+
+```docker-compose -f docker-compose-dev.yml run base python manage.py cov```
+
+Para acessar a visualização do HTML coverage no browser, acesse a pasta htmlcov e abra o arquivo index.html no navegador, ou utilize o comando:
+
+```google-chrome ./htmlcov/index.html```
