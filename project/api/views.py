@@ -31,21 +31,20 @@ def add_company():
     state         = company.get('state')
     company_phone = company.get('company_phone')
 
-    # admin = post_data.get('user')
+    admin = post_data.get('user')
     
-    # name       = admin.get('name')
-    # email      = admin.get('email')
-    # is_admin   = None
-    # company_id = admin.get('company_id')
-    # password   = admin.get('password')
+    name       = admin.get('name')
+    email      = admin.get('email')
+    is_admin   = None
+    password   = admin.get('password')
 
     try:
         company = Company(company_name, cnpj, company_email, fantasy_name, cep, city, state, company_phone)
         db.session.add(company)
         db.session.flush()
 
-        # admin = User(name, email, is_admin, company.id, password)
-        # db.session.add(admin)
+        admin = User(name, email, is_admin, company.id, password)
+        db.session.add(admin)
 
         db.session.commit()
 

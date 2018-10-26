@@ -6,13 +6,13 @@ class Company(db.Model):
     id            = db.Column(db.Integer,     primary_key=True, autoincrement=True)
     company_name  = db.Column(db.String(128), nullable=False)
     cnpj          = db.Column(db.String,     nullable=False)
-    # users         = db.relationship('User',   backref='company', lazy=True)
+    users         = db.relationship('User',   backref='company', lazy=True)
     company_email = db.Column(db.String(128), nullable=False)
     fantasy_name  = db.Column(db.String(128), nullable=False) 
     cep           = db.Column(db.String(128), nullable=True)
     city          = db.Column(db.String(128), nullable=True)
     state         = db.Column(db.String(128), nullable=True)
-    compay_phone  = db.Column(db.String(128), nullable=False)
+    company_phone = db.Column(db.String(128), nullable=False)
     
     def __init__(self, company_name, cnpj, company_email, fantasy_name, cep, city, state, company_phone):
         self.company_name  = company_name
