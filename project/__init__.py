@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 # Instantiate the app
-app	=	Flask(__name__)
+app	= Flask(__name__)
 
 
 # Set Configuration
@@ -13,9 +13,5 @@ app.config.from_object(app_settings)
 # Instanciate Database
 db = SQLAlchemy(app)
 
-
-@app.route('/',	methods=['GET'])
-def	ping_pong():
-	return	jsonify({
-		'data':	'Welcome to Kalkuli Users Service!!'
-	})
+from project.api.views import user_blueprint
+app.register_blueprint(user_blueprint)
