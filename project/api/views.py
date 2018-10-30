@@ -14,7 +14,7 @@ def add_company():
 
     error_response = {
         'status': 'fail',
-        'message': 'wrong json'
+        'message': 'company could not be saved'
     }
 
     if not post_data:
@@ -35,7 +35,6 @@ def add_company():
     
     name       = admin.get('name')
     email      = admin.get('email')
-    is_admin   = None
     password   = admin.get('password')
 
     try:
@@ -43,7 +42,7 @@ def add_company():
         db.session.add(company)
         db.session.flush()
 
-        admin = User(name, email, is_admin, company.id, password)
+        admin = User(name, email, company.id, password)
         db.session.add(admin)
 
         db.session.commit()
@@ -58,5 +57,6 @@ def add_company():
     except exc.IntegrityError:
         db.session.rollback()
         return jsonify({
-            'error': 'eerrro bizarro'
+            'status': 'fail',
+            'message': 'company could not be saved'
         }), 400
