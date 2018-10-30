@@ -12,7 +12,7 @@ class TestUserService(BaseTestCase):
         self.assertIn('Welcome to Kalkuli Users Service!!', data['data'])
 
 
-    def test_users(self):
+    def test_add_company(self):
         with self.client:
             response = self.client.post(
                 '/add_company',
