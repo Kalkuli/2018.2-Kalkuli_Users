@@ -10,7 +10,8 @@ WORKDIR	/app
 RUN apk update && \
     apk add --virtual build-deps gcc python-dev musl-dev && \
     apk add postgresql-dev && \
-    apk add netcat-openbsd
+    apk add netcat-openbsd && \
+    apk add libffi-dev
 
 
 # Dealing with requirements
