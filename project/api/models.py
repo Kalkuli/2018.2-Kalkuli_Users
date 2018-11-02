@@ -1,4 +1,7 @@
 from project import db
+import datetime
+import jwt
+from project.api import app, db, bcrypt
 from sqlalchemy_utils import PasswordType, EmailType
 from project import bcrypt 
 
@@ -29,21 +32,32 @@ class Company(db.Model):
 
 class User(db.Model):
     __tablename__ = 'user'
-    id         = db.Column(db.Integer,     primary_key=True, autoincrement=True)
-    name       = db.Column(db.String(128), nullable=False)
-    email      = db.Column(EmailType,      nullable=False, unique=True)
+
+    id            = db.Column(db.Integer,     primary_key=True, autoincrement=True)
+    name          = db.Column(db.String(128), nullable=False)
+    email         = db.Column(EmailType,      nullable=False, unique=True)
+    registered_on = db.Column(db.DateTime, nullable=False)
     company_id = db.Column(db.Integer,     db.ForeignKey('company.id'), nullable=False)
-    password   = db.Column(PasswordType(schemes=[ 'pbkdf2_sha512' ]), unique=False,nullable=False)
+    password   = db.Column(db.String(255), unique=False,nullable=False)
     
     def __init__(self, name, email, company_id, password):
-        self.name       = name
-        self.email      = email
-        self.company_id = company_id
-        self.password   = password
+        self.name          = name
+        self.email         = email
+        self.company_id    = company_id
+        self.password      = bcrypt.generate_password_hash(password, app.config.get('BCRYPT_LOG_ROUNDS'))
+        self.registered_on = datetime.datetime.now()
     
-    @password.setter
-    def _set_password(self, plaintext):
-        self.password = bcrypt.generate_password_hash(plaintext)
-
-    
-    
+    def encode_auth_token(self, user_id):
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                app.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
