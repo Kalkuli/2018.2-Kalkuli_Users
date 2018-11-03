@@ -9,10 +9,10 @@ from flask import current_app
 
 class Company(db.Model):
     __tablename__ = 'company'
-    id            = db.Column(db.Integer,     primary_key=True, autoincrement=True)
+    id            = db.Column(db.Integer, primary_key=True, autoincrement=True)
     company_name  = db.Column(db.String(128), nullable=False)
-    cnpj          = db.Column(db.String,     nullable=True)
-    users         = db.relationship('User',   backref='company', lazy=True)
+    cnpj          = db.Column(db.String, nullable=True)
+    user          = db.relationship('User', uselist=False, back_populates='company')
     company_email = db.Column(db.String(128), nullable=False, unique=True)
     fantasy_name  = db.Column(db.String(128), nullable=True) 
     cep           = db.Column(db.String(128), nullable=True)
@@ -46,12 +46,13 @@ class Company(db.Model):
 class User(db.Model):
     __tablename__ = 'user'
 
-    id            = db.Column(db.Integer,     primary_key=True, autoincrement=True)
+    id            = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username      = db.Column(db.String(128), nullable=False)
-    email         = db.Column(EmailType,      nullable=False, unique=True)
+    email         = db.Column(EmailType, nullable=False, unique=True)
     registered_on = db.Column(db.DateTime, nullable=False)
-    company_id    = db.Column(db.Integer,     db.ForeignKey('company.id'), nullable=False)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
+    company_id    = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+    company       = db.relationship('Company', back_populates='user')
+    active        = db.Column(db.Boolean(), default=True, nullable=False)
     password      = db.Column(db.String(255), unique=False,nullable=False)
     
     def __init__(self, username, email, company_id, password):
