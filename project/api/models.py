@@ -68,6 +68,7 @@ class User(db.Model):
             'email': self.email,
             'company_id': self.company_id,
             'password': self.password,
+            'active': self.active
         }
 
     def encode_auth_token(self, user_id):

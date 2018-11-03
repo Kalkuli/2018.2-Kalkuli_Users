@@ -137,7 +137,6 @@ def logout_user(resp):
 
 @user_blueprint.route('/auth/status', methods=['GET'])
 def get_user_status():
-# get auth token
     auth_header = request.headers.get('Authorization')
     response_object = {
         'status': 'fail',

@@ -1,6 +1,7 @@
 from flask.cli import FlaskGroup
 from project import create_app, db
 from project.api.models import Company, User
+from project.tests.utils import add_company
 import unittest
 import coverage
 
@@ -53,7 +54,23 @@ def cov():
         return 0
     return 1
 
-
+@cli.command()
+def seeduserdb():
+    company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
+    db.session.add(User(
+        username='michael',
+        email='michael@reallynotreal.com',
+        password='greaterthaneight',
+        company_id=company.id
+    ))
+    company_two = add_company('Kalkuli', '00.000.000/0000-00', 'kli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
+    db.session.add(User(
+        username='michaelherman',
+        email='michael@mherman.org',
+        password='greaterthaneight',
+        company_id=company_two.id
+    ))
+    db.session.commit()
 
 if __name__ == '__main__':
     cli()
