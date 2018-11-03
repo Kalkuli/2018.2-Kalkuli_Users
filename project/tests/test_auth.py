@@ -125,3 +125,40 @@ class TestAuthService(BaseTestCase):
             self.assertEqual(response.status_code, 400)
             self.assertIn('Invalid payload.', data['message'])
             self.assertIn('fail', data['status'])
+
+    def test_registered_user_login(self):
+        company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
+        with self.client:
+            add_user('test', 'test@test.com', 'test', company.id)
+            response = self.client.post(
+                '/auth/login',
+                data=json.dumps({
+                    'email': 'test@test.com',
+                    'password': 'test',
+                    'company_id': company.id
+                }),
+                content_type='application/json'
+            )
+            data = json.loads(response.data.decode())
+            self.assertTrue(data['status'] == 'success')
+            self.assertTrue(data['message'] == 'Successfully logged in.')
+            self.assertTrue(data['auth_token'])
+            self.assertTrue(response.content_type == 'application/json')
+            self.assertEqual(response.status_code, 200)
+    def test_not_registered_user_login(self):
+        company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
+        with self.client:
+            response = self.client.post(
+                '/auth/login',
+                data=json.dumps({
+                    'email': 'test@test.com',
+                    'password': 'test',
+                    'company_id': company.id
+                }),
+                content_type='application/json'
+            )
+            data = json.loads(response.data.decode())
+            self.assertTrue(data['status'] == 'fail')
+            self.assertTrue(data['message'] == 'User does not exist.')
+            self.assertTrue(response.content_type == 'application/json')
+            self.assertEqual(response.status_code, 404)
