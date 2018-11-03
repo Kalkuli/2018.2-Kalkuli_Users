@@ -8,8 +8,8 @@ from project import db
 
 user_blueprint = Blueprint('user', __name__)
 
-@user_blueprint.route('/add_company', methods=['POST'])
-def add_company():
+@user_blueprint.route('/signup', methods=['POST'])
+def add_company_user():
     post_data = request.get_json()
 
     error_response = {
@@ -42,18 +42,18 @@ def add_company():
         db.session.add(company)
         db.session.flush()
 
-        admin = User(name, email, company.id, password)
-        db.session.add(admin)
-
-        db.session.commit()
-
-        response = {
-            'status': 'success',
-            'message': 'Company was created!'
-        }
-
-        return jsonify(response), 201
-        
+        admin = User.query.filter_by(email=email).first()
+        if not admin:
+            db.session.add(User(username=username, email=email, password=password))
+            db.session.commit()
+            response = {
+                'status': 'success',
+                'message': 'Sign up was successful!'
+            }
+            return jsonify(response), 201
+        else:
+            response['message'] = 'Sorry. That email already exists.'
+            return jsonify(response_object), 400
     except exc.IntegrityError:
         db.session.rollback()
         return jsonify({
