@@ -146,22 +146,12 @@ def logout_user(resp):
     return jsonify(response_object), 200
 
 @user_blueprint.route('/auth/status', methods=['GET'])
-def get_user_status():
-    auth_header = request.headers.get('Authorization')
+@authenticate
+def get_user_status(resp):
+    user = User.query.filter_by(id=resp).first()
     response_object = {
-        'status': 'fail',
-        'message': 'Provide a valid auth token.'
+        'status': 'success',
+        'message': 'success',
+        'data': user.to_json()
     }
-    if auth_header:
-        auth_token = auth_header.split(' ')[1]
-        resp = User.decode_auth_token(auth_token)
-        if not isinstance(resp, str):
-            user = User.query.filter_by(id=resp).first()
-            response_object['status'] = 'success'
-            response_object['message'] = 'Success.'
-            response_object['data'] = user.to_json()
-            return jsonify(response_object), 200
-        response_object['message'] = resp
-        return jsonify(response_object), 401
-    else:
-        return jsonify(response_object), 401
+    return jsonify(response_object), 200
