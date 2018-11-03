@@ -7,7 +7,7 @@ import time
 
 user_blueprint = Blueprint('user', __name__)
 
-@user_blueprint.route('/signup', methods=['POST'])
+@user_blueprint.route('/user', methods=['POST'])
 def add_company_user():
     post_data = request.get_json()
 
@@ -32,7 +32,7 @@ def add_company_user():
 
     admin = post_data.get('user')
     
-    name       = admin.get('name')
+    username   = admin.get('username')
     email      = admin.get('email')
     password   = admin.get('password')
 
@@ -43,7 +43,7 @@ def add_company_user():
 
         admin = User.query.filter_by(email=email).first()
         if not admin:
-            db.session.add(User(username=username, email=email, password=password))
+            db.session.add(User(username=username, email=email, password=password, company_id=company.id))
             db.session.commit()
             response = {
                 'status': 'success',
