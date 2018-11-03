@@ -247,13 +247,12 @@ class TestUserService(BaseTestCase):
             self.assertIn('company could not be saved', data['message'])
 
     def test_add_user(self):
-        user = add_user('dutra', 'test@test.com', 'fasdudhusfa')
-        db.session.add(user)
-        db.session.commit()
+        user = add_user('dutra', 'test@test.com', 'test')
         self.assertTrue(user.id)
         self.assertEqual(user.username, 'dutra')
         self.assertEqual(user.email, 'test@test.com')
         self.assertTrue(user.active)
+        self.assertTrue(user.password)
 
     def test_add_user_duplicate_email(self):
         user = add_user('dutra', 'test@test.com', 'sdfuhdhaus')
@@ -273,6 +272,20 @@ class TestUserService(BaseTestCase):
         user_one = add_user('dutra', 'test@test.com', 'greaterthaneight')
         user_two = add_user('lucas', 'test@test2.com', 'greaterthaneight')
         self.assertNotEqual(user_one.password, user_two.password)
+
+    def test_add_user_invalid_json_keys_no_password(self):
+        with self.client:
+            response = self.client.post(
+                '/signup',
+                data=json.dumps(dict(
+                    username='dutra',
+                    email='dutra@reallynotreal.com')),
+                content_type='application/json',
+            )
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertIn('Invalid payload.', data['message'])
+            self.assertIn('fail', data['status'])
         
 if __name__ == '__main__':
     unittest.main()
