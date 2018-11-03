@@ -5,7 +5,7 @@ from project import db
 from project.api.models import User
 from project.tests.base import BaseTestCase
 from project.tests.utils import add_user, add_company
-import time
+from flask import current_app
 
 class TestAuthService(BaseTestCase):
     def test_user_registration(self):
@@ -225,4 +225,29 @@ class TestAuthService(BaseTestCase):
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(
             data['message'] == 'Invalid token. Please log in again.')
+            self.assertEqual(response.status_code, 401)
+
+    def test_invalid_logout_expired_token(self):
+        company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
+        add_user('test', 'test@test.com', 'test', company.id)
+        current_app.config['TOKEN_EXPIRATION_SECONDS'] = -1
+        with self.client:
+            resp_login = self.client.post(
+                '/auth/login',
+                data=json.dumps({
+                    'email': 'test@test.com',
+                    'password': 'test'
+                }),
+                content_type='application/json'
+            )
+            # invalid token logout
+            token = json.loads(resp_login.data.decode())['auth_token']
+            response = self.client.get(
+                '/auth/logout',
+                headers={'Authorization': f'Bearer {token}'}
+            )
+            data = json.loads(response.data.decode())
+            self.assertTrue(data['status'] == 'fail')
+            self.assertTrue(
+                data['message'] == 'Signature expired. Please log in again.')
             self.assertEqual(response.status_code, 401)
