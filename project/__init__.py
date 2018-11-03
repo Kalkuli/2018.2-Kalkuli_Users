@@ -19,7 +19,6 @@ def create_app(script_info=None):
 
     # set up extensions
     db.init_app(app)
-    toolbar.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
 

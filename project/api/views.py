@@ -54,7 +54,7 @@ def add_company_user():
         else:
             response['message'] = 'Sorry. That email already exists.'
             return jsonify(response_object), 400
-    except exc.IntegrityError:
+    except (exc.IntegrityError, ValueError) as e:
         db.session.rollback()
         return jsonify({
             'status': 'fail',
