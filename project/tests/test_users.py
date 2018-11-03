@@ -247,7 +247,7 @@ class TestUserService(BaseTestCase):
             self.assertIn('company could not be saved', data['message'])
 
     def test_add_user(self):
-        user = add_user('dutra', 'test@test.com')
+        user = add_user('dutra', 'test@test.com', 'fasdudhusfa')
         db.session.add(user)
         db.session.commit()
         self.assertTrue(user.id)
@@ -256,18 +256,23 @@ class TestUserService(BaseTestCase):
         self.assertTrue(user.active)
 
     def test_add_user_duplicate_email(self):
-        user = add_user('dutra', 'test@test.com')
+        user = add_user('dutra', 'test@test.com', 'sdfuhdhaus')
         db.session.add(user)
         db.session.commit()
-        duplicate_user = add_user('lucas', 'test@test.com')
+        duplicate_user = add_user('lucas', 'test@test.com', 'ahudfhausdf')
         db.session.add(duplicate_user)
         self.assertRaises(IntegrityError, db.session.commit)
 
     def test_to_json(self):
-        user = add_user('dutra', 'test@test.com')
+        user = add_user('dutra', 'test@test.com', 'greaterthaneight')
         db.session.add(user)
         db.session.commit()
         self.assertTrue(isinstance(user.to_json(), dict))
+
+    def test_passwords_are_random(self):
+        user_one = add_user('dutra', 'test@test.com', 'greaterthaneight')
+        user_two = add_user('lucas', 'test@test2.com', 'greaterthaneight')
+        self.assertNotEqual(user_one.password, user_two.password)
         
 if __name__ == '__main__':
     unittest.main()
