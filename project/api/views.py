@@ -135,7 +135,7 @@ def logout_user(resp):
     }
     return jsonify(response_object), 200
 
-@auth_blueprint.route('/auth/status', methods=['GET'])
+@user_blueprint.route('/auth/status', methods=['GET'])
 def get_user_status():
 # get auth token
     auth_header = request.headers.get('Authorization')
