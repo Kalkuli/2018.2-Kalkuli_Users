@@ -2,6 +2,8 @@ import json
 import unittest
 from project.tests.base import BaseTestCase
 from project import db
+from sqlalchemy.exc import IntegrityError
+from project.tests.utils import add_user
 
 
 
@@ -12,9 +14,6 @@ from project import db
 #     self.assertIn('Welcome to Kalkuli Users Service!!', data['data'])
 
 class TestUserService(BaseTestCase):
-    
-
-
     def test_add_company(self):
         with self.client:
             response = self.client.post(
@@ -247,7 +246,28 @@ class TestUserService(BaseTestCase):
             self.assertIn('fail', data['status'])
             self.assertIn('company could not be saved', data['message'])
 
+    def test_add_user(self):
+        user = add_user('dutra', 'test@test.com')
+        db.session.add(user)
+        db.session.commit()
+        self.assertTrue(user.id)
+        self.assertEqual(user.username, 'dutra')
+        self.assertEqual(user.email, 'test@test.com')
+        self.assertTrue(user.active)
 
+    def test_add_user_duplicate_email(self):
+        user = add_user('dutra', 'test@test.com')
+        db.session.add(user)
+        db.session.commit()
+        duplicate_user = add_user('lucas', 'test@test.com')
+        db.session.add(duplicate_user)
+        self.assertRaises(IntegrityError, db.session.commit)
+
+    def test_to_json(self):
+        user = add_user('dutra', 'test@test.com')
+        db.session.add(user)
+        db.session.commit()
+        self.assertTrue(isinstance(user.to_json(), dict))
         
 if __name__ == '__main__':
     unittest.main()
