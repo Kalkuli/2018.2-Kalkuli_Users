@@ -146,23 +146,6 @@ class TestAuthService(BaseTestCase):
             self.assertTrue(data['auth_token'])
             self.assertTrue(response.content_type == 'application/json')
             self.assertEqual(response.status_code, 200)
-    # def test_not_registered_user_login(self):
-    #     company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
-    #     with self.client:
-    #         response = self.client.post(
-    #             '/auth/login',
-    #             data=json.dumps({
-    #                 'email': 'test@test.com',
-    #                 'password': 'test',
-    #                 'company_id': company.id
-    #             }),
-    #             content_type='application/json'
-    #         )
-    #         data = json.loads(response.data.decode())
-    #         self.assertTrue(data['status'] == 'fail')
-    #         self.assertTrue(data['message'] == 'User does not exist.')
-    #         self.assertTrue(response.content_type == 'application/json')
-    #         self.assertEqual(response.status_code, 404)
 
     def test_valid_logout(self):
         company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
@@ -316,7 +299,6 @@ class TestAuthService(BaseTestCase):
     def test_invalid_status_inactive(self):
         company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
         add_user('test', 'test@test.com', 'test', company.id)
-        # update user
         user = User.query.filter_by(email='test@test.com').first()
         user.active = False
         db.session.commit()

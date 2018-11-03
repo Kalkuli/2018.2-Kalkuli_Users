@@ -281,22 +281,32 @@ class TestUserService(BaseTestCase):
         user_two = add_user('lucas', 'test@test2.com', 'greaterthaneight', company_two.id)
         self.assertNotEqual(user_one.password, user_two.password)
 
-    # def test_add_user_invalid_json_keys_no_password(self):
-    #     company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
-    #     with self.client:
-    #         response = self.client.post(
-    #             '/user',
-    #             data=json.dumps(dict(
-    #                 username='dutra',
-    #                 company_id=company.id,
-    #                 email='dutra@reallynotreal.com'
-    #             )),
-    #             content_type='application/json',
-    #         )
-    #         data = json.loads(response.data.decode())
-    #         self.assertEqual(response.status_code, 400)
-    #         self.assertIn('Invalid payload.', data['message'])
-    #         self.assertIn('fail', data['status'])
+    def test_add_user_invalid_json_keys_no_password(self):
+        with self.client:
+            response = self.client.post(
+                '/user',
+                data=json.dumps({
+                    'company': {
+                        'company_name': 'Kalkuli',
+                        'cnpj': '00.000.000/0000-00',
+                        'company_email': 'contact.kalkuli@kalkuli.com',
+                        'fantasy_name': 'Kaliu',
+                        'cep': '00-000/00',
+                        'city': 'Brasilia',
+                        'state': 'Distrito Federal',
+                        'company_phone': '61 98888888'
+                    },
+                    'user': {
+                        'username': 'Esio',
+                        'email': 'esiogustavo@kalkuli.com'
+                    }
+                }),
+                content_type='application/json',
+            )
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertIn('company could not be saved', data['message'])
+            self.assertIn('fail', data['status'])
 
     def test_encode_auth_token(self):
         company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
