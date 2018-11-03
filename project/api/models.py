@@ -1,9 +1,10 @@
 from project import db
 import datetime
 import jwt
-from project.api import app, db, bcrypt
+from project import create_app
 from sqlalchemy_utils import PasswordType, EmailType
 from project import bcrypt 
+from flask import current_app
 
 
 class Company(db.Model):
@@ -45,5 +46,20 @@ class User(db.Model):
         self.username      = username
         self.email         = email
         self.company_id    = company_id
-        self.password      = bcrypt.generate_password_hash(password, app.config.get('BCRYPT_LOG_ROUNDS'))
+        self.password      = bcrypt.generate_password_hash(password, current_app.config.get('BCRYPT_LOG_ROUNDS')).decode()
         self.registered_on = datetime.datetime.now()
+
+    def encode_auth_token(self, user_id):
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                current_app.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
