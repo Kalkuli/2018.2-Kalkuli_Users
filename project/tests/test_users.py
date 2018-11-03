@@ -36,7 +36,7 @@ class TestUserService(BaseTestCase):
 
             self.assertEqual(response.status_code, 201)
             self.assertIn('success', data['status'])
-            self.assertIn('Sign up was successful!', data['message'])
+            self.assertIn('Company and user were created!', data['message'])
 
     def test_add_company_only_not_nullable(self):
         with self.client:
@@ -60,7 +60,7 @@ class TestUserService(BaseTestCase):
 
             self.assertEqual(response.status_code, 201)
             self.assertIn('success', data['status'])
-            self.assertIn('Sign up was successful!', data['message'])
+            self.assertIn('Company and user were created!', data['message'])
 
     def test_all_users(self):
         company = add_company('Kalkuli', '00.000.000/0000-00', 'k@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')

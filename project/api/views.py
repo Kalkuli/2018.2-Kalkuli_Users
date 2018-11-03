@@ -58,7 +58,7 @@ def add_company_user():
             db.session.commit()
             response = {
                 'status': 'success',
-                'message': 'Sign up was successful!'
+                'message': 'Company and user were created!'
             }
             return jsonify(response), 201
         else:
