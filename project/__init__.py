@@ -6,7 +6,6 @@ from flask_migrate import Migrate
 
 # instantiate the extensions
 db = SQLAlchemy()
-toolbar = DebugToolbarExtension()
 migrate = Migrate()
 bcrypt = Bcrypt()
 

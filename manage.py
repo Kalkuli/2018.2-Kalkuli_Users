@@ -1,5 +1,5 @@
 from flask.cli import FlaskGroup
-from project import app, db
+from project import create_app, db
 from project.api.models import Company, User
 import unittest
 import coverage
@@ -17,7 +17,7 @@ COV = coverage.coverage(
 COV.start()
 
 
-cli = FlaskGroup(app)
+cli = FlaskGroup(create_app)
 
 
 # Registers comand to recreate database
