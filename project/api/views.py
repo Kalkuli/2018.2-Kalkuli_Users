@@ -8,6 +8,16 @@ import time
 
 user_blueprint = Blueprint('user', __name__)
 
+@user_blueprint.route('/users', methods=['GET'])
+def get_all_users():
+    response_object = {
+        'status': 'success',
+        'data': {
+            'users': [user.to_json() for user in User.query.all()]
+        }
+    }
+    return jsonify(response_object), 200
+
 @user_blueprint.route('/user', methods=['POST'])
 def add_company_user():
     post_data = request.get_json()
