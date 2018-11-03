@@ -125,7 +125,7 @@ def login_user():
         response_object['message'] = 'Try again.'
         return jsonify(response_object), 500
 
-@auth_blueprint.route('/auth/logout', methods=['GET'])
+@user_blueprint.route('/auth/logout', methods=['GET'])
 def logout_user():
     auth_header = request.headers.get('Authorization')
     response_object = {
