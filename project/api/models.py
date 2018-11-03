@@ -30,6 +30,18 @@ class Company(db.Model):
         self.state         = state
         self.company_phone = company_phone
 
+    def to_json(self):
+        return {
+            'company_name': self.company_name,
+            'cnpj': self.cnpj,
+            'company_email': self.company_email,
+            'fantasy_name': self.fantasy_name,
+            'cep': self.cep,
+            'city': self.city,
+            'state': self.state,
+            'company_phone': self.company_phone
+        }
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -48,6 +60,14 @@ class User(db.Model):
         self.company_id    = company_id
         self.password      = bcrypt.generate_password_hash(password, current_app.config.get('BCRYPT_LOG_ROUNDS')).decode()
         self.registered_on = datetime.datetime.now()
+
+    def to_json(self):
+        return {
+            'username': self.username,
+            'email': self.email,
+            'company_id': self.company_id,
+            'password': self.password,
+        }
 
     def encode_auth_token(self, user_id):
         try:
