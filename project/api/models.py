@@ -32,6 +32,7 @@ class Company(db.Model):
 
     def to_json(self):
         return {
+            'id': self.id,
             'company_name': self.company_name,
             'cnpj': self.cnpj,
             'company_email': self.company_email,

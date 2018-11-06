@@ -8,6 +8,16 @@ import time
 
 user_blueprint = Blueprint('user', __name__)
 
+@user_blueprint.route('/companies', methods=['GET'])
+def get_all_companies():
+    response_object = {
+        'status': 'success',
+        'data': {
+            'companies': [company.to_json() for company in Company.query.all()]
+        }
+    }
+    return jsonify(response_object), 200
+
 @user_blueprint.route('/users', methods=['GET'])
 def get_all_users():
     response_object = {
@@ -80,11 +90,23 @@ def register_user():
     }
     if not post_data:
         return jsonify(response_object), 400
-    username = post_data.get('username')
-    email = post_data.get('email')
-    password = post_data.get('password')
-    company_id = post_data.get('company_id')
+
+    company_name  = post_data.get('company_name')
+    cnpj          = post_data.get('cnpj')
+    company_email = post_data.get('company_email')
+    fantasy_name  = post_data.get('fantasy_name')
+    cep           = post_data.get('cep')
+    city          = post_data.get('city')
+    state         = post_data.get('state')
+    company_phone = post_data.get('company_phone')
+    
+    username   = post_data.get('username')
+    email      = post_data.get('email')
+    password   = post_data.get('password')
     try:
+        company = Company(company_name, cnpj, company_email, fantasy_name, cep, city, state, company_phone)
+        db.session.add(company)
+        db.session.flush()  
         user = User.query.filter(
         or_(User.username == username, User.email == email)).first()
         if not user:
@@ -92,8 +114,8 @@ def register_user():
                 username=username,
                 email=email,
                 password=password,
-                company_id=company_id
-            )
+                company_id=company.id
+            )       
             db.session.add(new_user)
             db.session.commit()
             auth_token = new_user.encode_auth_token(new_user.id)
