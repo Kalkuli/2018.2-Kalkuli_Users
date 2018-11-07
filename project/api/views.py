@@ -18,6 +18,27 @@ def get_all_users():
     }
     return jsonify(response_object), 200
 
+@user_blueprint.route('/company/<company_id>', methods=['GET'])
+def get_single_company(company_id):
+    error_response = {
+        'status': 'fail',
+        'message': 'Company not found'
+    }
+    try:
+        company = Company.query.filter_by(id=int(company_id)).first()
+
+        if not company:
+            return jsonify(error_response), 404
+
+        response = {
+            'status': 'success',
+            'data': company.to_json()
+        }
+    except ValueError:
+        return jsonify(error_response), 404
+
+    return jsonify(response), 200
+
 @user_blueprint.route('/user', methods=['POST'])
 def add_company_user():
     post_data = request.get_json()
