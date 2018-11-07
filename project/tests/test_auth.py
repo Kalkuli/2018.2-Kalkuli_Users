@@ -68,10 +68,17 @@ class TestAuthService(BaseTestCase):
             response = self.client.post(
                 '/auth/register',
                 data=json.dumps({
+                    'company_name': 'Kalkuli',
+                    'cnpj': '00.000.000/0000-00',
+                    'company_email': 'contact.kalkuli@kalkuli.com',
+                    'fantasy_name': 'Kaliu',
+                    'cep': '00-000/00',
+                    'city': 'Brasilia',
+                    'state': 'Distrito Federal',
+                    'company_phone': '61 98888888',
                     'username': 'test',
                     'email': 'test@test.com2',
                     'password': 'test',
-                    'company_id': company.id
                 }),
                 content_type='application/json',
             )
