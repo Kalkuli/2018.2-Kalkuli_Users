@@ -142,7 +142,6 @@ def login_user():
         return jsonify(response_object), 400
     email = post_data.get('email')
     password = post_data.get('password')
-    company_id = post_data.get('company_id')
     try:
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):

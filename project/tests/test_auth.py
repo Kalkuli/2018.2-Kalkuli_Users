@@ -194,8 +194,7 @@ class TestAuthService(BaseTestCase):
                 '/auth/login',
                 data=json.dumps({
                     'email': 'test@test.com',
-                    'password': 'test',
-                    'company_id': company.id
+                    'password': 'test'
                 }),
                 content_type='application/json'
             )
@@ -218,12 +217,10 @@ class TestAuthService(BaseTestCase):
                 '/auth/login',
                 data=json.dumps({
                     'email': 'test@test.com',
-                    'password': 'test',
-                    'company_id': company.id
+                    'password': 'test'
                 }),
                 content_type='application/json'
             )
-            # invalid token logout
             time.sleep(4)
             token = json.loads(resp_login.data.decode())['auth_token']
             response = self.client.get(
