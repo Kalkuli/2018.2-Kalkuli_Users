@@ -100,14 +100,19 @@ class TestAuthService(BaseTestCase):
             self.assertIn('fail', data['status'])
 
     def test_user_registration_invalid_json_keys_no_username(self):
-        company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
         with self.client:
             response = self.client.post(
                 '/auth/register',
                 data=json.dumps({
+                    'company_name': 'Kalkuli',
+                    'cnpj': '00.000.000/0000-00',
+                    'company_email': 'contact.kalkuli@kalkuli.com',
+                    'fantasy_name': 'Kaliu',
+                    'cep': '00-000/00',
+                    'city': 'Brasilia',
+                    'state': 'Distrito Federal',
                     'email': 'test@test.com',
                     'password': 'test',
-                    'company_id': company.id
                 }),
                 content_type='application/json',
             )
