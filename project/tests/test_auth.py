@@ -126,6 +126,13 @@ class TestAuthService(BaseTestCase):
             response = self.client.post(
                 '/auth/register',
                 data=json.dumps({
+                    'company_name': 'Kalkuli',
+                    'cnpj': '00.000.000/0000-00',
+                    'company_email': 'contact.kalkuli@kalkuli.com',
+                    'fantasy_name': 'Kaliu',
+                    'cep': '00-000/00',
+                    'city': 'Brasilia',
+                    'state': 'Distrito Federal',
                     'username': 'justatest',
                     'password': 'test',
                     'company_id': company.id
