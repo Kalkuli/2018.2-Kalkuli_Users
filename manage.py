@@ -1,21 +1,21 @@
-from flask.cli import FlaskGroup
-from project import create_app, db
-from project.api.models import Company, User
-from project.tests.utils import add_company
-import unittest
 import coverage
-
-
-# Config coverage report
 COV = coverage.coverage(
     branch=True,
     include='project/*',
     omit=[
         'project/tests/*',
-        'project/config.py',
+        'project/config.py'
     ]
 )
 COV.start()
+from flask.cli import FlaskGroup
+from project import create_app, db
+from project.api.models import Company, User
+from project.tests.utils import add_company
+import unittest
+
+
+# Config coverage report
 
 
 cli = FlaskGroup(create_app)
