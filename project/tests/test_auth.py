@@ -368,3 +368,23 @@ class TestAuthService(BaseTestCase):
 
             self.assertIn('fail', data['status'])
             self.assertIn('Invalid payload', data['message'])
+            self.assertEqual(resp_login.status_code, 400)
+
+    def test_login_not_registered_user(self):
+        company = add_company('Kalkuli', '00.000.000/0000-00', 'kalkuli@kaliu.com', 'kaliu', '789548546', 'ceilandia', 'df', '40028922')
+        user = add_user('test', 'test@test.com', 'test', company.id)
+
+        with self.client:
+            resp_login = self.client.post(
+                '/auth/login',
+                data=json.dumps({
+                    'email': 'dwer@eiei.com',
+                    'password': 'asdasddda'
+                }),
+                content_type='application/json'
+            ) 
+
+            data = json.loads(resp_login.data.decode())
+
+            self.assertIn('User does not exist.', data['message'])
+            self.assertEqual(resp_login.status_code, 404)
