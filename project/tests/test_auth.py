@@ -355,3 +355,16 @@ class TestAuthService(BaseTestCase):
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(data['message'] == 'Provide a valid auth token.')
             self.assertEqual(response.status_code, 401)
+
+    def test_login_without_data(self):
+        with self.client:
+            resp_login = self.client.post(
+                '/auth/login',
+                data=json.dumps({}),
+                content_type='application/json'
+            ) 
+
+            data = json.loads(resp_login.data.decode())
+
+            self.assertIn('fail', data['status'])
+            self.assertIn('Invalid payload', data['message'])
