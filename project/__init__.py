@@ -1,21 +1,28 @@
 import os
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
 
-# Instantiate the app
-app	=	Flask(__name__)
+# instantiate the extensions
+db = SQLAlchemy()
+migrate = Migrate()
+bcrypt = Bcrypt()
 
+def create_app(script_info=None):
+    #Instantiate the app
+    app	= Flask(__name__)
 
-# Set Configuration
-app_settings = os.getenv('APP_SETTINGS')
-app.config.from_object(app_settings)
+    # Set Configuration
+    app_settings = os.getenv('APP_SETTINGS')
+    app.config.from_object(app_settings)
 
-# Instanciate Database
-db = SQLAlchemy(app)
+    # set up extensions
+    db.init_app(app)
+    migrate.init_app(app, db)
+    bcrypt.init_app(app)
 
+    from project.api.views import user_blueprint
+    app.register_blueprint(user_blueprint)
 
-@app.route('/',	methods=['GET'])
-def	ping_pong():
-	return	jsonify({
-		'data':	'Welcome to Kalkuli Users Service!!'
-	})
+    return app
