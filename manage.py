@@ -17,8 +17,9 @@ import unittest
 
 # Config coverage report
 
+app = create_app()
+cli = FlaskGroup(app)
 
-cli = FlaskGroup(create_app)
 
 
 # Registers comand to recreate database
