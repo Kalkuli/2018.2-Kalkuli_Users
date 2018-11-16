@@ -82,6 +82,11 @@ docker-compose -f docker-compose-dev.yml run base python manage.py db migrate
 docker-compose -f docker-compose-dev.yml run base python manage.py db upgrade
 ```
 
+* Para popular o Banco de Dados execute:
+```
+docker-compose -f docker-compose-dev.yml run base python manage.py seed
+```
+
 ***
 
 <br>
