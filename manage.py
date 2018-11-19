@@ -13,6 +13,7 @@ from project import create_app, db
 from project.api.models import Company, User
 from project.tests.utils import add_company
 import unittest
+from populate import seedCompany, seedUser
 
 
 # Config coverage report
@@ -28,6 +29,13 @@ def recreatedb():
     db.drop_all()
     db.create_all()
     db.session.commit()
+
+
+# Populate Functions
+@cli.command()
+def seed():
+    seedCompany(db)
+    seedUser(db)
 
 
 # Registers comand to run tests

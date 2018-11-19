@@ -19,7 +19,7 @@ class Company(db.Model):
     city          = db.Column(db.String(128), nullable=True)
     state         = db.Column(db.String(128), nullable=True)
     company_phone = db.Column(db.String(128), nullable=True)
-    
+
     def __init__(self, company_name, cnpj, company_email, fantasy_name, cep, city, state, company_phone):
         self.company_name  = company_name
         self.cnpj          = cnpj
